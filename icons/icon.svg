@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <!-- Background -->
+  <rect width="512" height="512" rx="112" fill="#3a5c2d"/>
+  <!-- Glow -->
+  <circle cx="256" cy="240" r="170" fill="#4d7a3c" opacity="0.35"/>
+  <!-- Leaf body -->
+  <path d="M256 80
+    C210 120 155 175 148 245
+    C142 305 185 365 256 390
+    C327 365 370 305 364 245
+    C357 175 302 120 256 80Z"
+    fill="#8dc96a" opacity="0.9"/>
+  <!-- Inner leaf highlight -->
+  <path d="M256 120
+    C225 155 200 200 202 255
+    C204 295 228 335 256 355
+    C284 335 308 295 310 255
+    C312 200 287 155 256 120Z"
+    fill="#b0de88" opacity="0.5"/>
+  <!-- Center vein -->
+  <line x1="256" y1="85" x2="256" y2="385" stroke="#2d4a22" stroke-width="9" stroke-linecap="round"/>
+  <!-- Left veins -->
+  <line x1="250" y1="175" x2="205" y2="215" stroke="#2d4a22" stroke-width="5" stroke-linecap="round" opacity="0.6"/>
+  <line x1="248" y1="225" x2="195" y2="268" stroke="#2d4a22" stroke-width="5" stroke-linecap="round" opacity="0.6"/>
+  <line x1="249" y1="280" x2="205" y2="320" stroke="#2d4a22" stroke-width="5" stroke-linecap="round" opacity="0.6"/>
+  <!-- Right veins -->
+  <line x1="262" y1="175" x2="307" y2="215" stroke="#2d4a22" stroke-width="5" stroke-linecap="round" opacity="0.6"/>
+  <line x1="264" y1="225" x2="317" y2="268" stroke="#2d4a22" stroke-width="5" stroke-linecap="round" opacity="0.6"/>
+  <line x1="263" y1="280" x2="307" y2="320" stroke="#2d4a22" stroke-width="5" stroke-linecap="round" opacity="0.6"/>
+  <!-- Sparkle dots -->
+  <circle cx="165" cy="175" r="9" fill="#c4e89a" opacity="0.7"/>
+  <circle cx="345" cy="195" r="7" fill="#c4e89a" opacity="0.6"/>
+  <circle cx="148" cy="310" r="6" fill="#c4e89a" opacity="0.5"/>
+  <circle cx="362" cy="330" r="8" fill="#c4e89a" opacity="0.55"/>
+  <circle cx="200" cy="400" r="5" fill="#c4e89a" opacity="0.4"/>
+  <circle cx="310" cy="410" r="6" fill="#c4e89a" opacity="0.4"/>
+</svg>

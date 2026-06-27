@@ -1,0 +1,2077 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>FaeTrap Vendor Grove</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#4d7a3c">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="FaeTrap">
+<link rel="apple-touch-icon" href="icons/icon.svg">
+<style>
+:root {
+  --parchment: #f0ebe0;
+  --surface: #faf8f3;
+  --surface-raised: #fff9f0;
+  --border: #d8ceba;
+  --border-light: #e8e0d0;
+  --bark: #3a2d1e;
+  --bark-light: #5a4a38;
+  --muted: #8a7a65;
+  --forest: #4d7a3c;
+  --forest-dark: #3a5c2d;
+  --forest-light: #6a9a52;
+  --forest-bg: #eaf2e5;
+  --honey: #c49a2a;
+  --honey-dark: #a07818;
+  --honey-bg: #f5edd8;
+  --rose: #9b3d2d;
+  --rose-bg: #f5e8e5;
+  --sky: #4a7a8a;
+  --sky-bg: #e5f0f5;
+  --shadow-sm: 0 1px 3px rgba(58,45,30,0.10);
+  --shadow: 0 2px 10px rgba(58,45,30,0.12);
+  --shadow-lg: 0 4px 20px rgba(58,45,30,0.15);
+  --radius: 16px;
+  --radius-sm: 10px;
+  --radius-xs: 6px;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+  background: var(--parchment);
+  color: var(--bark);
+  min-height: 100vh;
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+#app {
+  max-width: 480px;
+  margin: 0 auto;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+/* ── Header ── */
+.app-header {
+  background: var(--surface);
+  padding: 14px 18px 10px;
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: var(--shadow-sm);
+}
+
+.app-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.app-brand-icon {
+  width: 38px;
+  height: 38px;
+  background: var(--forest-bg);
+  border: 1.5px solid var(--forest-light);
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 19px;
+  flex-shrink: 0;
+}
+
+.app-brand-name {
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: var(--forest-dark);
+  letter-spacing: -0.02em;
+}
+
+.app-brand-tagline {
+  font-size: 0.7rem;
+  color: var(--muted);
+  line-height: 1.3;
+  margin-top: 1px;
+}
+
+.nav-tabs {
+  display: flex;
+  gap: 3px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+}
+.nav-tabs::-webkit-scrollbar { display: none; }
+
+.nav-tab {
+  flex-shrink: 0;
+  padding: 6px 13px;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  cursor: pointer;
+  border: none;
+  background: transparent;
+  color: var(--muted);
+  transition: all 0.15s;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.nav-tab:hover { background: var(--border-light); color: var(--bark); }
+.nav-tab.active { background: var(--forest); color: white; }
+
+/* ── Main ── */
+.main-content {
+  flex: 1;
+  padding: 16px 15px 110px;
+}
+
+/* ── Bottom bar ── */
+.bottom-bar {
+  position: fixed;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: 480px;
+  background: var(--surface);
+  border-top: 1px solid var(--border);
+  padding: 10px 15px 22px;
+  display: flex;
+  gap: 8px;
+  z-index: 100;
+}
+
+/* ── Buttons ── */
+.btn {
+  padding: 10px 18px;
+  border-radius: 999px;
+  font-size: 0.88rem;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  transition: all 0.15s;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  white-space: nowrap;
+}
+.btn-primary { background: var(--forest); color: white; flex: 1; }
+.btn-primary:hover { background: var(--forest-dark); }
+.btn-secondary { background: var(--honey); color: white; flex: 1; }
+.btn-secondary:hover { background: var(--honey-dark); }
+.btn-outline {
+  background: transparent;
+  color: var(--bark);
+  border: 1.5px solid var(--border);
+}
+.btn-outline:hover { background: var(--border-light); }
+.btn-danger { background: var(--rose-bg); color: var(--rose); border: 1.5px solid #e8c5be; }
+.btn-danger:hover { background: var(--rose); color: white; }
+.btn-sm { padding: 6px 13px; font-size: 0.78rem; }
+
+/* ── Cards ── */
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 15px;
+  box-shadow: var(--shadow-sm);
+}
+.card + .card { margin-top: 10px; }
+
+/* ── Stats grid ── */
+.stats-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 9px;
+  margin-bottom: 14px;
+}
+
+.stat-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 13px;
+  box-shadow: var(--shadow-sm);
+}
+.stat-icon { font-size: 1.4rem; display: block; margin-bottom: 5px; }
+.stat-value { font-size: 1.55rem; font-weight: 800; color: var(--forest-dark); line-height: 1; margin-bottom: 3px; }
+.stat-label { font-size: 0.73rem; color: var(--muted); font-weight: 500; }
+
+/* ── Item cards ── */
+.item-list { display: flex; flex-direction: column; gap: 8px; }
+
+.item-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 13px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.item-card:hover { border-color: var(--forest-light); box-shadow: var(--shadow-sm); }
+
+.item-card-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin-bottom: 7px;
+}
+
+.item-avatar {
+  width: 38px;
+  height: 38px;
+  border-radius: var(--radius-xs);
+  background: var(--forest-bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 17px;
+  flex-shrink: 0;
+}
+
+.item-card-title { font-weight: 600; font-size: 0.93rem; }
+.item-card-sub { font-size: 0.77rem; color: var(--muted); margin-top: 2px; }
+
+.item-card-meta { display: flex; gap: 6px; flex-wrap: wrap; }
+
+/* ── Badges ── */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 0.71rem;
+  font-weight: 600;
+  gap: 3px;
+  white-space: nowrap;
+}
+.badge-green { background: var(--forest-bg); color: var(--forest-dark); }
+.badge-gold { background: var(--honey-bg); color: var(--honey-dark); }
+.badge-red { background: var(--rose-bg); color: var(--rose); }
+.badge-sky { background: var(--sky-bg); color: var(--sky); }
+.badge-muted { background: var(--border-light); color: var(--muted); }
+
+/* ── Search ── */
+.search-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--surface);
+  border: 1.5px solid var(--border);
+  border-radius: 999px;
+  padding: 8px 14px;
+  margin-bottom: 10px;
+  transition: border-color 0.15s;
+}
+.search-bar:focus-within { border-color: var(--forest); }
+.search-bar input {
+  flex: 1; border: none; background: transparent;
+  font-size: 0.87rem; color: var(--bark); outline: none;
+}
+.search-bar input::placeholder { color: var(--muted); }
+
+/* ── Filter chips ── */
+.filter-chips {
+  display: flex;
+  gap: 5px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  margin-bottom: 11px;
+  padding-bottom: 2px;
+}
+.filter-chips::-webkit-scrollbar { display: none; }
+
+.chip {
+  flex-shrink: 0;
+  padding: 5px 12px;
+  border-radius: 999px;
+  font-size: 0.77rem;
+  font-weight: 500;
+  cursor: pointer;
+  border: 1.5px solid var(--border);
+  background: var(--surface);
+  color: var(--muted);
+  transition: all 0.15s;
+}
+.chip:hover { border-color: var(--forest-light); color: var(--bark); }
+.chip.active { background: var(--forest-bg); border-color: var(--forest); color: var(--forest-dark); font-weight: 600; }
+
+/* ── Section headers ── */
+.section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 11px;
+}
+
+.view-title {
+  font-size: 1.25rem;
+  font-weight: 800;
+  margin-bottom: 13px;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  letter-spacing: -0.02em;
+}
+
+/* ── Empty state ── */
+.empty-state {
+  text-align: center;
+  padding: 36px 20px;
+  color: var(--muted);
+}
+.empty-icon { font-size: 2.8rem; margin-bottom: 10px; display: block; }
+.empty-state p { font-size: 0.87rem; line-height: 1.6; }
+
+/* ── Modal ── */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(45, 36, 24, 0.5);
+  z-index: 200;
+  display: flex;
+  align-items: flex-end;
+  animation: fadeIn 0.15s ease;
+}
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+.modal {
+  width: 100%;
+  max-width: 480px;
+  margin: 0 auto;
+  background: var(--surface);
+  border-radius: var(--radius) var(--radius) 0 0;
+  max-height: 92vh;
+  overflow-y: auto;
+  animation: slideUp 0.2s ease;
+}
+@keyframes slideUp {
+  from { transform: translateY(50px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 17px 18px 13px;
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+  background: var(--surface);
+  z-index: 1;
+}
+.modal-header h2 { font-size: 1.05rem; font-weight: 700; }
+
+.modal-body { padding: 15px 18px 10px; }
+
+.modal-footer {
+  display: flex;
+  gap: 8px;
+  padding: 12px 18px 28px;
+  border-top: 1px solid var(--border);
+}
+
+.close-btn {
+  width: 30px; height: 30px;
+  border-radius: 50%;
+  background: var(--border-light);
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+  color: var(--muted);
+  transition: all 0.15s;
+  flex-shrink: 0;
+}
+.close-btn:hover { background: var(--border); color: var(--bark); }
+
+/* ── Form elements ── */
+.form-group { margin-bottom: 13px; }
+.form-group label {
+  display: block;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--bark-light);
+  margin-bottom: 5px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.form-group input,
+.form-group select,
+.form-group textarea {
+  width: 100%;
+  padding: 9px 12px;
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-size: 0.9rem;
+  font-family: inherit;
+  color: var(--bark);
+  background: var(--surface-raised);
+  transition: border-color 0.15s;
+  outline: none;
+  appearance: none;
+  -webkit-appearance: none;
+}
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus { border-color: var(--forest); }
+.form-group textarea { resize: vertical; min-height: 78px; }
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 9px; }
+
+/* ── Fee rows ── */
+.fee-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 7px 0;
+  border-bottom: 1px solid var(--border-light);
+  font-size: 0.87rem;
+}
+.fee-row:last-child { border-bottom: none; }
+.fee-label { color: var(--muted); }
+.fee-amount { font-weight: 600; }
+.fee-amount.pos { color: var(--forest-dark); }
+.fee-amount.neg { color: var(--rose); }
+.fee-amount.neu { color: var(--honey-dark); }
+
+/* ── Progress ── */
+.progress-bar {
+  height: 7px;
+  background: var(--border-light);
+  border-radius: 999px;
+  overflow: hidden;
+  margin-top: 8px;
+}
+.progress-fill {
+  height: 100%;
+  border-radius: 999px;
+  background: var(--forest);
+  transition: width 0.4s ease;
+}
+
+/* ── Detail views ── */
+.detail-hero {
+  background: var(--forest-bg);
+  border: 1px solid var(--forest-light);
+  border-radius: var(--radius);
+  padding: 16px;
+  margin-bottom: 11px;
+  display: flex;
+  align-items: center;
+  gap: 13px;
+}
+.detail-hero-icon {
+  width: 52px; height: 52px;
+  background: white;
+  border-radius: var(--radius-sm);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 25px;
+  flex-shrink: 0;
+  box-shadow: var(--shadow-sm);
+}
+.detail-hero-title { font-size: 1.05rem; font-weight: 700; }
+.detail-hero-sub { font-size: 0.8rem; margin-top: 2px; }
+
+.detail-section-title {
+  font-size: 0.7rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--muted);
+  margin-bottom: 8px;
+}
+
+.detail-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 6px 0;
+  border-bottom: 1px solid var(--border-light);
+  font-size: 0.87rem;
+  gap: 12px;
+}
+.detail-row:last-child { border-bottom: none; }
+.detail-row-label { color: var(--muted); flex-shrink: 0; }
+.detail-row-value { font-weight: 500; text-align: right; word-break: break-word; }
+
+/* ── Toast ── */
+.toast {
+  position: fixed;
+  bottom: 82px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--bark);
+  color: white;
+  padding: 9px 17px;
+  border-radius: 999px;
+  font-size: 0.83rem;
+  font-weight: 500;
+  z-index: 400;
+  box-shadow: var(--shadow-lg);
+  animation: toastIn 0.2s ease;
+  white-space: nowrap;
+  pointer-events: none;
+}
+@keyframes toastIn {
+  from { opacity: 0; transform: translateX(-50%) translateY(8px); }
+  to   { opacity: 1; transform: translateX(-50%) translateY(0); }
+}
+
+/* ── Analytics bars ── */
+.analytics-bar-row {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  margin-bottom: 8px;
+  font-size: 0.8rem;
+}
+.analytics-bar-label {
+  width: 95px; flex-shrink: 0;
+  color: var(--muted); font-size: 0.76rem;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.analytics-bar-track {
+  flex: 1;
+  height: 19px;
+  background: var(--border-light);
+  border-radius: 4px;
+  overflow: hidden;
+}
+.analytics-bar-fill {
+  height: 100%;
+  border-radius: 4px;
+  background: var(--forest);
+  display: flex; align-items: center;
+  padding-right: 6px;
+  justify-content: flex-end;
+  font-size: 0.69rem;
+  color: white;
+  font-weight: 700;
+  min-width: 4px;
+  transition: width 0.5s ease;
+}
+.analytics-bar-fill.gold { background: var(--honey); }
+.analytics-bar-fill.sky  { background: var(--sky); }
+
+/* ── Event date badge ── */
+.event-date-badge {
+  display: flex; flex-direction: column; align-items: center;
+  background: var(--honey-bg);
+  border: 1px solid #dcc88a;
+  border-radius: var(--radius-xs);
+  padding: 5px 9px;
+  min-width: 46px;
+  flex-shrink: 0;
+}
+.event-date-month { font-size: 0.62rem; font-weight: 800; text-transform: uppercase; color: var(--honey-dark); letter-spacing: 0.05em; }
+.event-date-day   { font-size: 1.25rem; font-weight: 900; color: var(--honey-dark); line-height: 1; }
+
+/* ── Data actions ── */
+.data-action-card {
+  display: flex; align-items: center; gap: 12px;
+  padding: 13px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  margin-bottom: 8px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.data-action-card:hover { border-color: var(--forest-light); box-shadow: var(--shadow-sm); }
+.data-action-icon {
+  width: 40px; height: 40px;
+  border-radius: var(--radius-xs);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.2rem; flex-shrink: 0;
+}
+.data-action-title { font-weight: 600; font-size: 0.88rem; }
+.data-action-sub   { font-size: 0.76rem; color: var(--muted); margin-top: 2px; }
+
+/* ── Attendee tags ── */
+.attendee-list { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
+
+/* ── View transition ── */
+.view-enter { animation: viewIn 0.18s ease; }
+@keyframes viewIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Divider ── */
+.divider { height: 1px; background: var(--border-light); margin: 12px 0; }
+
+/* ── Responsive ── */
+@media (min-width: 480px) {
+  .modal-overlay { align-items: center; padding: 16px; }
+  .modal { border-radius: var(--radius); max-height: 88vh; }
+}
+
+/* ── Scrollbar ── */
+* { scrollbar-width: thin; scrollbar-color: var(--border) transparent; }
+
+/* ── PWA install banner ── */
+.install-banner {
+  position: fixed;
+  bottom: 82px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: calc(100% - 24px);
+  max-width: 456px;
+  background: var(--forest-bg);
+  border: 1.5px solid var(--forest-light);
+  border-radius: var(--radius);
+  padding: 12px 14px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  z-index: 150;
+  box-shadow: var(--shadow-lg);
+  animation: slideUp 0.25s ease;
+}
+.install-banner-icon { font-size: 1.6rem; flex-shrink: 0; }
+.install-banner-text { flex: 1; }
+.install-banner-title { font-weight: 700; font-size: 0.88rem; color: var(--forest-dark); }
+.install-banner-sub   { font-size: 0.75rem; color: var(--forest-dark); opacity: 0.8; margin-top: 1px; }
+.install-banner-actions { display: flex; gap: 6px; flex-shrink: 0; }
+.install-banner-btn {
+  padding: 7px 13px;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  cursor: pointer;
+  border: none;
+  transition: all 0.15s;
+}
+.install-banner-btn.primary { background: var(--forest); color: white; }
+.install-banner-btn.primary:hover { background: var(--forest-dark); }
+.install-banner-btn.dismiss { background: transparent; color: var(--muted); }
+.install-banner-btn.dismiss:hover { color: var(--bark); }
+</style>
+</head>
+<body>
+<div id="app"></div>
+<script>
+// ═══════════════════════════════════════════════
+// STATE
+// ═══════════════════════════════════════════════
+
+const STORAGE_KEY = 'faetrap_grove_v1';
+
+const defaultState = { vendors: [], events: [], contacts: [] };
+
+let state = (() => {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (raw) return { ...defaultState, ...JSON.parse(raw) };
+  } catch(e) {}
+  return { ...defaultState };
+})();
+
+let view = 'dashboard';
+let filter = 'all';
+let search = '';
+let detailStack = [];
+
+function save() { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }
+function uid() { return Date.now().toString(36) + Math.random().toString(36).slice(2,6); }
+
+// ═══════════════════════════════════════════════
+// CONFIG
+// ═══════════════════════════════════════════════
+
+const VENDOR_CATS = [
+  { id:'art',      label:'Art & Prints',    icon:'🎨' },
+  { id:'jewelry',  label:'Jewelry',         icon:'💍' },
+  { id:'clothing', label:'Clothing',        icon:'🧵' },
+  { id:'food',     label:'Food & Drink',    icon:'🍄' },
+  { id:'plants',   label:'Plants',          icon:'🌿' },
+  { id:'crafts',   label:'Crafts',          icon:'🪄' },
+  { id:'candles',  label:'Candles & Soap',  icon:'🕯️' },
+  { id:'vintage',  label:'Vintage',         icon:'🍂' },
+  { id:'music',    label:'Music',           icon:'🎵' },
+  { id:'other',    label:'Other',           icon:'✨' },
+];
+
+const VENDOR_STATUSES = [
+  { id:'confirmed', label:'Confirmed', badge:'badge-green' },
+  { id:'pending',   label:'Pending',   badge:'badge-gold'  },
+  { id:'waitlist',  label:'Waitlist',  badge:'badge-sky'   },
+  { id:'cancelled', label:'Cancelled', badge:'badge-red'   },
+];
+
+const EVENT_TYPES = [
+  { id:'market',    label:'Market',    icon:'🏕️' },
+  { id:'fair',      label:'Fair',      icon:'🎡' },
+  { id:'popup',     label:'Pop-up',    icon:'⚡' },
+  { id:'festival',  label:'Festival',  icon:'🌸' },
+  { id:'workshop',  label:'Workshop',  icon:'🔮' },
+  { id:'other',     label:'Other',     icon:'🌙' },
+];
+
+const EVENT_STATUSES = [
+  { id:'planning',  label:'Planning',  badge:'badge-gold'  },
+  { id:'upcoming',  label:'Upcoming',  badge:'badge-green' },
+  { id:'completed', label:'Completed', badge:'badge-muted' },
+  { id:'cancelled', label:'Cancelled', badge:'badge-red'   },
+];
+
+const CONTACT_ROLES = [
+  { id:'vendor',    label:'Vendor',    icon:'🍃', badge:'badge-green' },
+  { id:'customer',  label:'Customer',  icon:'🛍️', badge:'badge-sky'   },
+  { id:'partner',   label:'Partner',   icon:'🤝', badge:'badge-gold'  },
+  { id:'volunteer', label:'Volunteer', icon:'💚', badge:'badge-green' },
+  { id:'press',     label:'Press',     icon:'📰', badge:'badge-muted' },
+  { id:'other',     label:'Other',     icon:'✨', badge:'badge-muted' },
+];
+
+const getCat    = id => VENDOR_CATS.find(c => c.id === id)      || { icon:'✨', label: id || 'Other' };
+const getVS     = id => VENDOR_STATUSES.find(s => s.id === id)  || { label: id, badge:'badge-muted' };
+const getET     = id => EVENT_TYPES.find(t => t.id === id)      || { icon:'🌙', label: id };
+const getES     = id => EVENT_STATUSES.find(s => s.id === id)   || { label: id, badge:'badge-muted' };
+const getRole   = id => CONTACT_ROLES.find(r => r.id === id)    || { icon:'✨', label: id || 'Contact', badge:'badge-muted' };
+const initials  = n  => (n||'?').split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
+
+// ═══════════════════════════════════════════════
+// RENDER SHELL
+// ═══════════════════════════════════════════════
+
+function render() {
+  const app = document.getElementById('app');
+  app.innerHTML = '';
+  app.appendChild(mkHeader());
+  const main = document.createElement('div');
+  main.className = 'main-content';
+  main.appendChild(mkView());
+  app.appendChild(main);
+  app.appendChild(mkBottomBar());
+}
+
+function mkHeader() {
+  const el = document.createElement('header');
+  el.className = 'app-header';
+  el.innerHTML = `
+    <div class="app-brand">
+      <div class="app-brand-icon">🌿</div>
+      <div>
+        <div class="app-brand-name">FaeTrap Vendor Grove</div>
+        <div class="app-brand-tagline">Your enchanted vendor command center</div>
+      </div>
+    </div>
+    <nav class="nav-tabs"></nav>
+  `;
+  const nav = el.querySelector('.nav-tabs');
+  [
+    { id:'dashboard', label:'Dashboard', icon:'⬡' },
+    { id:'vendors',   label:'Vendors',   icon:'🍃' },
+    { id:'events',    label:'Events',    icon:'📅' },
+    { id:'contacts',  label:'Contacts',  icon:'🌙' },
+    { id:'analytics', label:'Analytics', icon:'✦'  },
+    { id:'data',      label:'Data',      icon:'🗝️' },
+  ].forEach(item => {
+    const btn = document.createElement('button');
+    btn.className = 'nav-tab' + (view === item.id ? ' active' : '');
+    btn.innerHTML = `${item.icon} ${item.label}`;
+    btn.onclick = () => { view = item.id; filter = 'all'; search = ''; detailStack = []; render(); };
+    nav.appendChild(btn);
+  });
+  return el;
+}
+
+function mkBottomBar() {
+  const bar = document.createElement('div');
+  bar.className = 'bottom-bar';
+  const a = document.createElement('button');
+  a.className = 'btn btn-primary';
+  a.innerHTML = '🍃 Add vendor';
+  a.onclick = () => showVendorForm();
+  const b = document.createElement('button');
+  b.className = 'btn btn-secondary';
+  b.innerHTML = '📅 Log event';
+  b.onclick = () => showEventForm();
+  bar.appendChild(a); bar.appendChild(b);
+  return bar;
+}
+
+function mkView() {
+  const div = document.createElement('div');
+  div.className = 'view-enter';
+  if (detailStack.length) {
+    const top = detailStack[detailStack.length - 1];
+    if      (top.type === 'vendor')  div.appendChild(mkVendorDetail(top.id));
+    else if (top.type === 'event')   div.appendChild(mkEventDetail(top.id));
+    else if (top.type === 'contact') div.appendChild(mkContactDetail(top.id));
+    return div;
+  }
+  switch (view) {
+    case 'dashboard': div.appendChild(mkDashboard()); break;
+    case 'vendors':   div.appendChild(mkVendors());   break;
+    case 'events':    div.appendChild(mkEvents());    break;
+    case 'contacts':  div.appendChild(mkContacts());  break;
+    case 'analytics': div.appendChild(mkAnalytics()); break;
+    case 'data':      div.appendChild(mkData());      break;
+  }
+  return div;
+}
+
+// ═══════════════════════════════════════════════
+// DASHBOARD
+// ═══════════════════════════════════════════════
+
+function mkDashboard() {
+  const div = document.createElement('div');
+  const confirmed    = state.vendors.filter(v => v.status === 'confirmed').length;
+  const totalPaid    = state.vendors.reduce((s,v) => s + (parseFloat(v.feesPaid)||0), 0);
+  const totalOwed    = state.vendors.reduce((s,v) => s + (parseFloat(v.feesOwed)||0), 0);
+  const upcomingEvts = state.events.filter(e => e.status === 'upcoming' || e.status === 'planning').length;
+
+  div.innerHTML = `<div class="view-title">⬡ Dashboard</div>`;
+
+  const grid = document.createElement('div');
+  grid.className = 'stats-grid';
+  grid.innerHTML = `
+    <div class="stat-card"><span class="stat-icon">🍃</span><div class="stat-value">${state.vendors.length}</div><div class="stat-label">Total vendors</div></div>
+    <div class="stat-card"><span class="stat-icon">✓</span><div class="stat-value" style="color:var(--forest-dark)">${confirmed}</div><div class="stat-label">Confirmed</div></div>
+    <div class="stat-card"><span class="stat-icon">💰</span><div class="stat-value" style="color:var(--honey-dark)">$${totalPaid.toFixed(0)}</div><div class="stat-label">Fees collected</div></div>
+    <div class="stat-card"><span class="stat-icon">📅</span><div class="stat-value">${upcomingEvts}</div><div class="stat-label">Active events</div></div>
+  `;
+  div.appendChild(grid);
+
+  if (totalOwed > 0) {
+    const alert = document.createElement('div');
+    alert.className = 'card';
+    alert.style.cssText = 'background:var(--honey-bg);border-color:#dcc88a;margin-bottom:13px;cursor:pointer';
+    alert.innerHTML = `
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px">
+        <span style="font-weight:700;font-size:0.9rem">🪙 Outstanding fees</span>
+        <span style="font-weight:800;color:var(--honey-dark)">$${totalOwed.toFixed(2)}</span>
+      </div>
+      <p style="font-size:0.78rem;color:var(--honey-dark)">${state.vendors.filter(v=>(parseFloat(v.feesOwed)||0)>0).length} vendor(s) have balances due</p>
+    `;
+    alert.onclick = () => { view = 'vendors'; render(); };
+    div.appendChild(alert);
+  }
+
+  if (state.vendors.length > 0) {
+    const sec = document.createElement('div');
+    sec.innerHTML = `<div class="section-header"><div style="font-weight:700;font-size:0.95rem">🌿 Recent vendors</div><button class="btn btn-outline btn-sm" id="seeVendors">See all</button></div>`;
+    const list = document.createElement('div');
+    list.className = 'item-list';
+    [...state.vendors].reverse().slice(0, 3).forEach(v => list.appendChild(mkVendorCard(v)));
+    sec.appendChild(list);
+    div.appendChild(sec);
+    sec.querySelector('#seeVendors').onclick = () => { view = 'vendors'; render(); };
+  }
+
+  const upcoming = state.events.filter(e => e.status === 'upcoming' || e.status === 'planning');
+  if (upcoming.length > 0) {
+    const sec = document.createElement('div');
+    sec.style.marginTop = '13px';
+    sec.innerHTML = `<div class="section-header"><div style="font-weight:700;font-size:0.95rem">📅 Upcoming events</div><button class="btn btn-outline btn-sm" id="seeEvts">See all</button></div>`;
+    const list = document.createElement('div');
+    list.className = 'item-list';
+    upcoming.slice(0,3).forEach(e => list.appendChild(mkEventCard(e)));
+    sec.appendChild(list);
+    div.appendChild(sec);
+    sec.querySelector('#seeEvts').onclick = () => { view = 'events'; render(); };
+  }
+
+  if (state.vendors.length === 0 && state.events.length === 0) {
+    const welcome = document.createElement('div');
+    welcome.className = 'card';
+    welcome.style.cssText = 'background:var(--forest-bg);border-color:var(--forest-light);text-align:center;padding:26px 16px;margin-top:6px';
+    welcome.innerHTML = `
+      <div style="font-size:2.6rem;margin-bottom:10px">🌿</div>
+      <h2 style="color:var(--forest-dark);margin-bottom:8px;font-size:1.1rem">Welcome to the Grove</h2>
+      <p style="font-size:0.84rem;color:var(--forest-dark);line-height:1.65;max-width:260px;margin:0 auto">A cottagecore command center for vendors, fees, events, and contacts. Basically a spreadsheet got lost in an enchanted forest and came back useful.</p>
+      <button class="btn btn-primary" style="margin-top:16px;flex:none" onclick="showVendorForm()">🍃 Add first vendor</button>
+    `;
+    div.appendChild(welcome);
+  }
+
+  return div;
+}
+
+// ═══════════════════════════════════════════════
+// VENDORS
+// ═══════════════════════════════════════════════
+
+function mkVendors() {
+  const div = document.createElement('div');
+
+  const header = document.createElement('div');
+  header.className = 'section-header';
+  header.innerHTML = `<div class="view-title" style="margin-bottom:0">🍃 Vendors</div>`;
+  const addBtn = document.createElement('button');
+  addBtn.className = 'btn btn-primary btn-sm';
+  addBtn.innerHTML = '+ Add';
+  addBtn.onclick = () => showVendorForm();
+  header.appendChild(addBtn);
+  div.appendChild(header);
+
+  const sb = document.createElement('div');
+  sb.className = 'search-bar';
+  sb.innerHTML = `<span style="color:var(--muted);font-size:0.9rem">🔍</span><input type="text" placeholder="Search vendors…" value="${search}">`;
+  sb.querySelector('input').oninput = e => { search = e.target.value; updateVList(); };
+  div.appendChild(sb);
+
+  const chips = document.createElement('div');
+  chips.className = 'filter-chips';
+  [{ id:'all', label:'All' }, ...VENDOR_STATUSES].forEach(f => {
+    const c = document.createElement('button');
+    c.className = 'chip' + (filter === f.id ? ' active' : '');
+    c.textContent = f.label;
+    c.onclick = () => { filter = f.id; chips.querySelectorAll('.chip').forEach(x => x.classList.remove('active')); c.classList.add('active'); updateVList(); };
+    chips.appendChild(c);
+  });
+  div.appendChild(chips);
+
+  const list = document.createElement('div');
+  list.className = 'item-list';
+  div.appendChild(list);
+
+  window.updateVList = () => {
+    let vs = state.vendors;
+    if (filter !== 'all') vs = vs.filter(v => v.status === filter);
+    if (search) {
+      const q = search.toLowerCase();
+      vs = vs.filter(v => (v.name||'').toLowerCase().includes(q) || (v.businessName||'').toLowerCase().includes(q) || (v.boothNumber||'').toLowerCase().includes(q) || (v.category||'').toLowerCase().includes(q));
+    }
+    list.innerHTML = '';
+    if (!vs.length) {
+      list.innerHTML = `<div class="empty-state"><span class="empty-icon">🌙</span><p>No vendors found.<br>The grove awaits its first enchanted seller.</p></div>`;
+    } else {
+      vs.forEach(v => list.appendChild(mkVendorCard(v)));
+    }
+  };
+  updateVList();
+  return div;
+}
+
+function mkVendorCard(v) {
+  const cat = getCat(v.category);
+  const st  = getVS(v.status);
+  const paid = parseFloat(v.feesPaid)||0;
+  const owed = parseFloat(v.feesOwed)||0;
+  const card = document.createElement('div');
+  card.className = 'item-card';
+  card.innerHTML = `
+    <div class="item-card-header">
+      <div class="item-avatar">${cat.icon}</div>
+      <div style="flex:1;min-width:0">
+        <div class="item-card-title" style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${v.businessName || v.name || '—'}</div>
+        <div class="item-card-sub">${v.name || ''}${v.boothNumber ? ' · Booth '+v.boothNumber : ''}</div>
+      </div>
+      <div style="display:flex;flex-direction:column;align-items:flex-end;gap:3px;flex-shrink:0">
+        <span class="badge ${st.badge}">${st.label}</span>
+        ${owed > 0 ? `<span class="badge badge-gold">Owes $${owed.toFixed(0)}</span>` : ''}
+      </div>
+    </div>
+    <div class="item-card-meta">
+      <span class="badge badge-muted">${cat.icon} ${cat.label}</span>
+      ${paid > 0 ? `<span class="badge badge-green">Paid $${paid.toFixed(0)}</span>` : ''}
+    </div>
+  `;
+  card.onclick = () => { detailStack.push({ type:'vendor', id:v.id }); render(); };
+  return card;
+}
+
+function mkVendorDetail(vid) {
+  const v = state.vendors.find(x => x.id === vid);
+  if (!v) { detailStack.pop(); render(); return document.createElement('div'); }
+
+  const cat  = getCat(v.category);
+  const st   = getVS(v.status);
+  const paid = parseFloat(v.feesPaid)||0;
+  const owed = parseFloat(v.feesOwed)||0;
+  const fee  = parseFloat(v.boothFee)||0;
+
+  const div = document.createElement('div');
+
+  const back = document.createElement('button');
+  back.className = 'btn btn-outline btn-sm';
+  back.innerHTML = '← Back';
+  back.style.marginBottom = '13px';
+  back.onclick = () => { detailStack.pop(); render(); };
+  div.appendChild(back);
+
+  // Hero
+  const hero = document.createElement('div');
+  hero.className = 'detail-hero';
+  hero.innerHTML = `
+    <div class="detail-hero-icon">${cat.icon}</div>
+    <div>
+      <div class="detail-hero-title">${v.businessName || v.name}</div>
+      <div class="detail-hero-sub" style="color:var(--forest-dark)">${v.name || ''}</div>
+      <div style="margin-top:6px;display:flex;gap:5px;flex-wrap:wrap">
+        <span class="badge ${st.badge}">${st.label}</span>
+        ${v.boothNumber ? `<span class="badge badge-muted">Booth ${v.boothNumber}</span>` : ''}
+      </div>
+    </div>
+  `;
+  div.appendChild(hero);
+
+  // Contact info
+  const info = document.createElement('div');
+  info.className = 'card';
+  info.style.marginBottom = '9px';
+  let ihtml = '<div class="detail-section-title">Contact Info</div>';
+  if (v.email)     ihtml += `<div class="detail-row"><span class="detail-row-label">Email</span><span class="detail-row-value"><a href="mailto:${v.email}" style="color:var(--forest)">${v.email}</a></span></div>`;
+  if (v.phone)     ihtml += `<div class="detail-row"><span class="detail-row-label">Phone</span><span class="detail-row-value"><a href="tel:${v.phone}" style="color:var(--forest)">${v.phone}</a></span></div>`;
+  if (v.website)   ihtml += `<div class="detail-row"><span class="detail-row-label">Website</span><span class="detail-row-value" style="color:var(--forest);word-break:break-all">${v.website}</span></div>`;
+  if (v.instagram) ihtml += `<div class="detail-row"><span class="detail-row-label">Instagram</span><span class="detail-row-value" style="color:var(--forest)">@${v.instagram.replace('@','')}</span></div>`;
+  ihtml += `<div class="detail-row"><span class="detail-row-label">Category</span><span class="detail-row-value">${cat.icon} ${cat.label}</span></div>`;
+  if (!v.email && !v.phone && !v.website && !v.instagram) ihtml += `<p style="font-size:0.82rem;color:var(--muted)">No contact info added yet.</p>`;
+  info.innerHTML = ihtml;
+  div.appendChild(info);
+
+  // Fees
+  const fees = document.createElement('div');
+  fees.className = 'card';
+  fees.style.marginBottom = '9px';
+  fees.innerHTML = `
+    <div class="detail-section-title">Fees</div>
+    <div class="fee-row"><span class="fee-label">Booth fee</span><span class="fee-amount">$${fee.toFixed(2)}</span></div>
+    <div class="fee-row"><span class="fee-label">Paid</span><span class="fee-amount pos">$${paid.toFixed(2)}</span></div>
+    <div class="fee-row"><span class="fee-label">Outstanding</span><span class="fee-amount ${owed>0?'neg':'pos'}">$${owed.toFixed(2)}</span></div>
+    ${fee > 0 ? `
+      <div class="progress-bar"><div class="progress-fill" style="width:${Math.min(100,(paid/fee)*100).toFixed(0)}%"></div></div>
+      <div style="font-size:0.71rem;color:var(--muted);margin-top:4px">${Math.round((paid/fee)*100)}% collected</div>
+    ` : ''}
+  `;
+  div.appendChild(fees);
+
+  // Notes
+  if (v.notes) {
+    const nc = document.createElement('div');
+    nc.className = 'card';
+    nc.style.marginBottom = '9px';
+    nc.innerHTML = `<div class="detail-section-title">Notes</div><p style="font-size:0.87rem;color:var(--bark-light);line-height:1.65">${v.notes}</p>`;
+    div.appendChild(nc);
+  }
+
+  // Events
+  const evts = state.events.filter(e => (e.vendorIds||[]).includes(vid));
+  if (evts.length) {
+    const ec = document.createElement('div');
+    ec.className = 'card';
+    ec.style.marginBottom = '9px';
+    ec.innerHTML = `<div class="detail-section-title">Events (${evts.length})</div>`;
+    evts.forEach(e => {
+      const et = getET(e.type);
+      const row = document.createElement('div');
+      row.className = 'detail-row';
+      row.style.cursor = 'pointer';
+      row.innerHTML = `<span class="detail-row-label">${et.icon} ${e.name}</span><span class="detail-row-value" style="color:var(--muted)">${e.date||'—'}</span>`;
+      row.onclick = () => { detailStack.push({ type:'event', id:e.id }); render(); };
+      ec.appendChild(row);
+    });
+    div.appendChild(ec);
+  }
+
+  // Actions
+  const acts = document.createElement('div');
+  acts.style.cssText = 'display:flex;gap:8px;margin-top:4px';
+  const editBtn = document.createElement('button');
+  editBtn.className = 'btn btn-primary';
+  editBtn.innerHTML = '✏️ Edit vendor';
+  editBtn.style.flex = '1';
+  editBtn.onclick = () => showVendorForm(v);
+  const delBtn = document.createElement('button');
+  delBtn.className = 'btn btn-danger';
+  delBtn.innerHTML = 'Delete';
+  delBtn.onclick = () => {
+    if (confirm(`Remove "${v.businessName || v.name}" from the grove?`)) {
+      state.vendors = state.vendors.filter(x => x.id !== vid);
+      save(); detailStack.pop();
+      showToast('Vendor removed from the grove');
+      render();
+    }
+  };
+  acts.appendChild(editBtn); acts.appendChild(delBtn);
+  div.appendChild(acts);
+  return div;
+}
+
+// ═══════════════════════════════════════════════
+// EVENTS
+// ═══════════════════════════════════════════════
+
+function mkEvents() {
+  const div = document.createElement('div');
+
+  const header = document.createElement('div');
+  header.className = 'section-header';
+  header.innerHTML = `<div class="view-title" style="margin-bottom:0">📅 Events</div>`;
+  const addBtn = document.createElement('button');
+  addBtn.className = 'btn btn-secondary btn-sm';
+  addBtn.innerHTML = '+ Log event';
+  addBtn.onclick = () => showEventForm();
+  header.appendChild(addBtn);
+  div.appendChild(header);
+
+  const sb = document.createElement('div');
+  sb.className = 'search-bar';
+  sb.innerHTML = `<span style="color:var(--muted);font-size:0.9rem">🔍</span><input type="text" placeholder="Search events…" value="${search}">`;
+  sb.querySelector('input').oninput = e => { search = e.target.value; updateEList(); };
+  div.appendChild(sb);
+
+  const chips = document.createElement('div');
+  chips.className = 'filter-chips';
+  [{ id:'all', label:'All' }, ...EVENT_STATUSES].forEach(f => {
+    const c = document.createElement('button');
+    c.className = 'chip' + (filter === f.id ? ' active' : '');
+    c.textContent = f.label;
+    c.onclick = () => { filter = f.id; chips.querySelectorAll('.chip').forEach(x => x.classList.remove('active')); c.classList.add('active'); updateEList(); };
+    chips.appendChild(c);
+  });
+  div.appendChild(chips);
+
+  const list = document.createElement('div');
+  list.className = 'item-list';
+  div.appendChild(list);
+
+  window.updateEList = () => {
+    let evs = [...state.events];
+    if (filter !== 'all') evs = evs.filter(e => e.status === filter);
+    if (search) {
+      const q = search.toLowerCase();
+      evs = evs.filter(e => (e.name||'').toLowerCase().includes(q) || (e.location||'').toLowerCase().includes(q));
+    }
+    evs.sort((a,b) => (b.date||'').localeCompare(a.date||''));
+    list.innerHTML = '';
+    if (!evs.length) {
+      list.innerHTML = `<div class="empty-state"><span class="empty-icon">🌙</span><p>No events found.<br>The calendar awaits its first gathering.</p></div>`;
+    } else {
+      evs.forEach(e => list.appendChild(mkEventCard(e)));
+    }
+  };
+  updateEList();
+  return div;
+}
+
+function mkEventCard(e) {
+  const et  = getET(e.type);
+  const st  = getES(e.status);
+  const cnt = (e.vendorIds||[]).length;
+  const card = document.createElement('div');
+  card.className = 'item-card';
+
+  let dateBadge = `<div class="item-avatar">${et.icon}</div>`;
+  let sub = e.location || '';
+  if (e.date) {
+    const d = new Date(e.date + 'T12:00:00');
+    const mo = d.toLocaleString('default',{month:'short'}).toUpperCase();
+    const dy = d.getDate();
+    dateBadge = `<div class="event-date-badge"><span class="event-date-month">${mo}</span><span class="event-date-day">${dy}</span></div>`;
+    const ds = d.toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'});
+    sub = (sub ? sub + ' · ' : '') + ds;
+  }
+
+  card.innerHTML = `
+    <div class="item-card-header">
+      ${dateBadge}
+      <div style="flex:1;min-width:0">
+        <div class="item-card-title" style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${e.name}</div>
+        <div class="item-card-sub">${sub}</div>
+      </div>
+      <span class="badge ${st.badge}" style="flex-shrink:0">${st.label}</span>
+    </div>
+    <div class="item-card-meta">
+      <span class="badge badge-muted">${et.icon} ${et.label}</span>
+      ${cnt > 0 ? `<span class="badge badge-green">🍃 ${cnt} vendor${cnt!==1?'s':''}</span>` : ''}
+      ${e.time ? `<span class="badge badge-muted">⏰ ${e.time}</span>` : ''}
+    </div>
+  `;
+  card.onclick = () => { detailStack.push({ type:'event', id:e.id }); render(); };
+  return card;
+}
+
+function mkEventDetail(eid) {
+  const e = state.events.find(x => x.id === eid);
+  if (!e) { detailStack.pop(); render(); return document.createElement('div'); }
+
+  const et   = getET(e.type);
+  const st   = getES(e.status);
+  const evVendors = (e.vendorIds||[]).map(id => state.vendors.find(v=>v.id===id)).filter(Boolean);
+
+  const div = document.createElement('div');
+
+  const back = document.createElement('button');
+  back.className = 'btn btn-outline btn-sm';
+  back.innerHTML = '← Back';
+  back.style.marginBottom = '13px';
+  back.onclick = () => { detailStack.pop(); render(); };
+  div.appendChild(back);
+
+  // Hero
+  const hero = document.createElement('div');
+  hero.className = 'detail-hero';
+  hero.style.background = 'var(--honey-bg)';
+  hero.style.borderColor = '#dcc88a';
+  hero.innerHTML = `
+    <div class="detail-hero-icon" style="font-size:26px">${et.icon}</div>
+    <div>
+      <div class="detail-hero-title">${e.name}</div>
+      <div class="detail-hero-sub" style="color:var(--honey-dark)">${e.location || 'No location set'}</div>
+      <div style="margin-top:6px;display:flex;gap:5px;flex-wrap:wrap">
+        <span class="badge ${st.badge}">${st.label}</span>
+        <span class="badge badge-muted">${et.icon} ${et.label}</span>
+      </div>
+    </div>
+  `;
+  div.appendChild(hero);
+
+  // Info
+  const info = document.createElement('div');
+  info.className = 'card';
+  info.style.marginBottom = '9px';
+  let ihtml = '<div class="detail-section-title">Event Info</div>';
+  if (e.date) {
+    const d = new Date(e.date + 'T12:00:00');
+    ihtml += `<div class="detail-row"><span class="detail-row-label">Date</span><span class="detail-row-value">${d.toLocaleDateString('en-US',{weekday:'long',year:'numeric',month:'long',day:'numeric'})}</span></div>`;
+  }
+  if (e.time)       ihtml += `<div class="detail-row"><span class="detail-row-label">Time</span><span class="detail-row-value">${e.time}</span></div>`;
+  if (e.location)   ihtml += `<div class="detail-row"><span class="detail-row-label">Location</span><span class="detail-row-value">${e.location}</span></div>`;
+  if (e.boothCount) ihtml += `<div class="detail-row"><span class="detail-row-label">Booth capacity</span><span class="detail-row-value">${e.boothCount}${evVendors.length ? ' ('+evVendors.length+' assigned)' : ''}</span></div>`;
+  info.innerHTML = ihtml;
+  div.appendChild(info);
+
+  // Vendors
+  const vc = document.createElement('div');
+  vc.className = 'card';
+  vc.style.marginBottom = '9px';
+  const vh = document.createElement('div');
+  vh.style.cssText = 'display:flex;align-items:center;justify-content:space-between;margin-bottom:9px';
+  vh.innerHTML = `<div class="detail-section-title" style="margin-bottom:0">Vendors (${evVendors.length})</div>`;
+  const avBtn = document.createElement('button');
+  avBtn.className = 'btn btn-outline btn-sm';
+  avBtn.innerHTML = '+ Assign vendors';
+  avBtn.onclick = () => showVendorPicker(e);
+  vh.appendChild(avBtn);
+  vc.appendChild(vh);
+
+  if (!evVendors.length) {
+    vc.innerHTML += `<p style="font-size:0.82rem;color:var(--muted)">No vendors assigned yet.</p>`;
+  } else {
+    const al = document.createElement('div');
+    al.className = 'attendee-list';
+    evVendors.forEach(v => {
+      const cat = getCat(v.category);
+      const tag = document.createElement('div');
+      tag.className = 'badge badge-green';
+      tag.style.cursor = 'pointer';
+      tag.innerHTML = `${cat.icon} ${v.businessName || v.name}`;
+      tag.onclick = () => { detailStack.push({ type:'vendor', id:v.id }); render(); };
+      al.appendChild(tag);
+    });
+    vc.appendChild(al);
+  }
+  div.appendChild(vc);
+
+  // Notes
+  if (e.notes) {
+    const nc = document.createElement('div');
+    nc.className = 'card';
+    nc.style.marginBottom = '9px';
+    nc.innerHTML = `<div class="detail-section-title">Notes</div><p style="font-size:0.87rem;color:var(--bark-light);line-height:1.65">${e.notes}</p>`;
+    div.appendChild(nc);
+  }
+
+  // Actions
+  const acts = document.createElement('div');
+  acts.style.cssText = 'display:flex;gap:8px;margin-top:4px';
+  const editBtn = document.createElement('button');
+  editBtn.className = 'btn btn-secondary';
+  editBtn.innerHTML = '✏️ Edit event';
+  editBtn.style.flex = '1';
+  editBtn.onclick = () => showEventForm(e);
+  const delBtn = document.createElement('button');
+  delBtn.className = 'btn btn-danger';
+  delBtn.innerHTML = 'Delete';
+  delBtn.onclick = () => {
+    if (confirm(`Remove "${e.name}"?`)) {
+      state.events = state.events.filter(x => x.id !== eid);
+      save(); detailStack.pop();
+      showToast('Event removed');
+      render();
+    }
+  };
+  acts.appendChild(editBtn); acts.appendChild(delBtn);
+  div.appendChild(acts);
+  return div;
+}
+
+// ═══════════════════════════════════════════════
+// CONTACTS
+// ═══════════════════════════════════════════════
+
+function mkContacts() {
+  const div = document.createElement('div');
+
+  const header = document.createElement('div');
+  header.className = 'section-header';
+  header.innerHTML = `<div class="view-title" style="margin-bottom:0">🌙 Contacts</div>`;
+  const addBtn = document.createElement('button');
+  addBtn.className = 'btn btn-outline btn-sm';
+  addBtn.innerHTML = '+ Add';
+  addBtn.onclick = () => showContactForm();
+  header.appendChild(addBtn);
+  div.appendChild(header);
+
+  const sb = document.createElement('div');
+  sb.className = 'search-bar';
+  sb.innerHTML = `<span style="color:var(--muted);font-size:0.9rem">🔍</span><input type="text" placeholder="Search contacts…" value="${search}">`;
+  sb.querySelector('input').oninput = e => { search = e.target.value; updateCList(); };
+  div.appendChild(sb);
+
+  const list = document.createElement('div');
+  list.className = 'item-list';
+  div.appendChild(list);
+
+  window.updateCList = () => {
+    let cs = state.contacts;
+    if (search) {
+      const q = search.toLowerCase();
+      cs = cs.filter(c => (c.name||'').toLowerCase().includes(q) || (c.email||'').toLowerCase().includes(q) || (c.role||'').toLowerCase().includes(q));
+    }
+    list.innerHTML = '';
+    if (!cs.length) {
+      list.innerHTML = `<div class="empty-state"><span class="empty-icon">🌙</span><p>No contacts yet.<br>Add collaborators, customers, or partners.</p></div>`;
+    } else {
+      cs.forEach(c => list.appendChild(mkContactCard(c)));
+    }
+  };
+  updateCList();
+  return div;
+}
+
+function mkContactCard(c) {
+  const role = getRole(c.role);
+  const card = document.createElement('div');
+  card.className = 'item-card';
+  card.innerHTML = `
+    <div class="item-card-header">
+      <div class="item-avatar" style="background:var(--sky-bg);font-size:13px;font-weight:800;color:var(--sky)">${initials(c.name)}</div>
+      <div style="flex:1;min-width:0">
+        <div class="item-card-title">${c.name}</div>
+        <div class="item-card-sub">${c.email || c.phone || '—'}</div>
+      </div>
+      <span class="badge ${role.badge}" style="flex-shrink:0">${role.icon} ${role.label}</span>
+    </div>
+    ${c.notes ? `<p style="font-size:0.77rem;color:var(--muted);overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;margin-top:4px">${c.notes}</p>` : ''}
+  `;
+  card.onclick = () => { detailStack.push({ type:'contact', id:c.id }); render(); };
+  return card;
+}
+
+function mkContactDetail(cid) {
+  const c = state.contacts.find(x => x.id === cid);
+  if (!c) { detailStack.pop(); render(); return document.createElement('div'); }
+
+  const role = getRole(c.role);
+  const div = document.createElement('div');
+
+  const back = document.createElement('button');
+  back.className = 'btn btn-outline btn-sm';
+  back.innerHTML = '← Back';
+  back.style.marginBottom = '13px';
+  back.onclick = () => { detailStack.pop(); render(); };
+  div.appendChild(back);
+
+  const hero = document.createElement('div');
+  hero.className = 'detail-hero';
+  hero.style.background = 'var(--sky-bg)';
+  hero.style.borderColor = '#a0ccd8';
+  hero.innerHTML = `
+    <div class="detail-hero-icon" style="font-size:18px;font-weight:800;color:var(--sky)">${initials(c.name)}</div>
+    <div>
+      <div class="detail-hero-title">${c.name}</div>
+      <div class="detail-hero-sub" style="color:var(--sky)">${role.label}</div>
+      <span class="badge ${role.badge}" style="margin-top:6px;display:inline-flex">${role.icon} ${role.label}</span>
+    </div>
+  `;
+  div.appendChild(hero);
+
+  const info = document.createElement('div');
+  info.className = 'card';
+  info.style.marginBottom = '9px';
+  let ihtml = '<div class="detail-section-title">Contact Info</div>';
+  if (c.email) ihtml += `<div class="detail-row"><span class="detail-row-label">Email</span><span class="detail-row-value"><a href="mailto:${c.email}" style="color:var(--forest)">${c.email}</a></span></div>`;
+  if (c.phone) ihtml += `<div class="detail-row"><span class="detail-row-label">Phone</span><span class="detail-row-value"><a href="tel:${c.phone}" style="color:var(--forest)">${c.phone}</a></span></div>`;
+  if (!c.email && !c.phone) ihtml += `<p style="font-size:0.82rem;color:var(--muted)">No contact info added yet.</p>`;
+  if (c.notes) ihtml += `<div class="divider"></div><div class="detail-section-title">Notes</div><p style="font-size:0.87rem;color:var(--bark-light);line-height:1.65">${c.notes}</p>`;
+  info.innerHTML = ihtml;
+  div.appendChild(info);
+
+  const acts = document.createElement('div');
+  acts.style.cssText = 'display:flex;gap:8px;margin-top:4px';
+  const editBtn = document.createElement('button');
+  editBtn.className = 'btn btn-primary';
+  editBtn.innerHTML = '✏️ Edit';
+  editBtn.style.flex = '1';
+  editBtn.onclick = () => showContactForm(c);
+  const delBtn = document.createElement('button');
+  delBtn.className = 'btn btn-danger';
+  delBtn.innerHTML = 'Delete';
+  delBtn.onclick = () => {
+    if (confirm(`Remove ${c.name}?`)) {
+      state.contacts = state.contacts.filter(x => x.id !== cid);
+      save(); detailStack.pop();
+      showToast('Contact removed');
+      render();
+    }
+  };
+  acts.appendChild(editBtn); acts.appendChild(delBtn);
+  div.appendChild(acts);
+  return div;
+}
+
+// ═══════════════════════════════════════════════
+// ANALYTICS
+// ═══════════════════════════════════════════════
+
+function mkAnalytics() {
+  const div = document.createElement('div');
+  div.innerHTML = `<div class="view-title">✦ Analytics</div>`;
+
+  if (!state.vendors.length && !state.events.length) {
+    div.innerHTML += `<div class="empty-state"><span class="empty-icon">✦</span><p>Add vendors to see analytics.<br>The numbers will bloom in time.</p></div>`;
+    return div;
+  }
+
+  const totalPaid  = state.vendors.reduce((s,v) => s + (parseFloat(v.feesPaid)||0), 0);
+  const totalOwed  = state.vendors.reduce((s,v) => s + (parseFloat(v.feesOwed)||0), 0);
+  const totalFee   = state.vendors.reduce((s,v) => s + (parseFloat(v.boothFee)||0), 0);
+
+  // Revenue summary
+  const revCard = document.createElement('div');
+  revCard.className = 'card';
+  revCard.style.marginBottom = '9px';
+  revCard.innerHTML = `
+    <div class="detail-section-title">Revenue Summary</div>
+    <div class="fee-row"><span class="fee-label">Total booth fees</span><span class="fee-amount">$${totalFee.toFixed(2)}</span></div>
+    <div class="fee-row"><span class="fee-label">Collected</span><span class="fee-amount pos">$${totalPaid.toFixed(2)}</span></div>
+    <div class="fee-row"><span class="fee-label">Outstanding</span><span class="fee-amount ${totalOwed>0?'neg':'pos'}">$${totalOwed.toFixed(2)}</span></div>
+    ${totalFee > 0 ? `
+      <div class="progress-bar"><div class="progress-fill" style="width:${Math.min(100,(totalPaid/totalFee)*100).toFixed(0)}%"></div></div>
+      <div style="font-size:0.71rem;color:var(--muted);margin-top:4px">${Math.round((totalPaid/totalFee)*100)}% of expected revenue collected</div>
+    ` : ''}
+  `;
+  div.appendChild(revCard);
+
+  // Vendor status
+  if (state.vendors.length) {
+    const stCard = document.createElement('div');
+    stCard.className = 'card';
+    stCard.style.marginBottom = '9px';
+    stCard.innerHTML = `<div class="detail-section-title">Vendor Status</div>`;
+    VENDOR_STATUSES.forEach(s => {
+      const cnt = state.vendors.filter(v => v.status === s.id).length;
+      if (!cnt) return;
+      const pct = (cnt / state.vendors.length * 100).toFixed(0);
+      const row = document.createElement('div');
+      row.className = 'analytics-bar-row';
+      row.innerHTML = `
+        <div class="analytics-bar-label">${s.label}</div>
+        <div class="analytics-bar-track">
+          <div class="analytics-bar-fill ${s.id==='pending'||s.id==='waitlist'?'gold':s.id==='cancelled'?'sky':''}" style="width:${pct}%">${cnt}</div>
+        </div>
+      `;
+      stCard.appendChild(row);
+    });
+    div.appendChild(stCard);
+  }
+
+  // Category breakdown
+  if (state.vendors.length) {
+    const catCard = document.createElement('div');
+    catCard.className = 'card';
+    catCard.style.marginBottom = '9px';
+    catCard.innerHTML = `<div class="detail-section-title">Vendor Categories</div>`;
+    const counts = {};
+    state.vendors.forEach(v => { const k = v.category||'other'; counts[k] = (counts[k]||0)+1; });
+    const maxC = Math.max(...Object.values(counts));
+    Object.entries(counts).sort((a,b)=>b[1]-a[1]).forEach(([id, n]) => {
+      const cat = getCat(id);
+      const row = document.createElement('div');
+      row.className = 'analytics-bar-row';
+      row.innerHTML = `
+        <div class="analytics-bar-label">${cat.icon} ${cat.label.split(' ')[0]}</div>
+        <div class="analytics-bar-track">
+          <div class="analytics-bar-fill gold" style="width:${(n/maxC*100).toFixed(0)}%">${n}</div>
+        </div>
+      `;
+      catCard.appendChild(row);
+    });
+    div.appendChild(catCard);
+  }
+
+  // Top fee payers
+  const topPayers = [...state.vendors]
+    .filter(v => (parseFloat(v.feesPaid)||0) > 0)
+    .sort((a,b) => (parseFloat(b.feesPaid)||0) - (parseFloat(a.feesPaid)||0))
+    .slice(0, 8);
+  if (topPayers.length) {
+    const fCard = document.createElement('div');
+    fCard.className = 'card';
+    fCard.style.marginBottom = '9px';
+    fCard.innerHTML = `<div class="detail-section-title">Top Fee Collections</div>`;
+    const maxF = parseFloat(topPayers[0].feesPaid)||1;
+    topPayers.forEach(v => {
+      const paid = parseFloat(v.feesPaid)||0;
+      const row = document.createElement('div');
+      row.className = 'analytics-bar-row';
+      row.innerHTML = `
+        <div class="analytics-bar-label">${(v.businessName||v.name||'?').slice(0,13)}</div>
+        <div class="analytics-bar-track">
+          <div class="analytics-bar-fill" style="width:${(paid/maxF*100).toFixed(0)}%">$${paid.toFixed(0)}</div>
+        </div>
+      `;
+      fCard.appendChild(row);
+    });
+    div.appendChild(fCard);
+  }
+
+  // Events summary
+  if (state.events.length) {
+    const evCard = document.createElement('div');
+    evCard.className = 'card';
+    evCard.innerHTML = `
+      <div class="detail-section-title">Events Overview</div>
+      <div class="fee-row"><span class="fee-label">Total events</span><span class="fee-amount">${state.events.length}</span></div>
+      <div class="fee-row"><span class="fee-label">Upcoming / Planning</span><span class="fee-amount pos">${state.events.filter(e=>e.status==='upcoming'||e.status==='planning').length}</span></div>
+      <div class="fee-row"><span class="fee-label">Completed</span><span class="fee-amount neu">${state.events.filter(e=>e.status==='completed').length}</span></div>
+      <div class="fee-row"><span class="fee-label">Avg vendors / event</span><span class="fee-amount">${(state.events.reduce((s,e)=>s+(e.vendorIds||[]).length,0)/state.events.length).toFixed(1)}</span></div>
+    `;
+    div.appendChild(evCard);
+  }
+
+  return div;
+}
+
+// ═══════════════════════════════════════════════
+// DATA
+// ═══════════════════════════════════════════════
+
+function mkData() {
+  const div = document.createElement('div');
+  div.innerHTML = `<div class="view-title">🗝️ Data</div>`;
+
+  const size = new Blob([JSON.stringify(state)]).size;
+  const info = document.createElement('div');
+  info.className = 'card';
+  info.style.marginBottom = '14px';
+  info.innerHTML = `
+    <div class="detail-section-title">Grove Inventory</div>
+    <div class="fee-row"><span class="fee-label">🍃 Vendors</span><span class="fee-amount">${state.vendors.length}</span></div>
+    <div class="fee-row"><span class="fee-label">📅 Events</span><span class="fee-amount">${state.events.length}</span></div>
+    <div class="fee-row"><span class="fee-label">🌙 Contacts</span><span class="fee-amount">${state.contacts.length}</span></div>
+    <div class="fee-row"><span class="fee-label">💾 Storage used</span><span class="fee-amount">${(size/1024).toFixed(1)} KB</span></div>
+  `;
+  div.appendChild(info);
+
+  [
+    { icon:'📤', bg:'var(--forest-bg)', title:'Export JSON backup',   sub:'Download all data as a portable backup file',   fn: exportData  },
+    { icon:'📥', bg:'var(--honey-bg)',  title:'Import JSON backup',   sub:'Restore from a previously exported backup file', fn: importData  },
+    { icon:'🖨️', bg:'var(--sky-bg)',    title:'Print vendor list',    sub:'Open a printable vendor roster in a new tab',    fn: printVendors },
+    { icon:'🗑️', bg:'var(--rose-bg)',   title:'Clear all data',       sub:'Permanently remove all data from the grove',    fn: clearData, danger: true },
+  ].forEach(a => {
+    const card = document.createElement('div');
+    card.className = 'data-action-card';
+    card.innerHTML = `
+      <div class="data-action-icon" style="background:${a.bg}">${a.icon}</div>
+      <div style="flex:1">
+        <div class="data-action-title" ${a.danger?'style="color:var(--rose)"':''}>${a.title}</div>
+        <div class="data-action-sub">${a.sub}</div>
+      </div>
+      <span style="color:var(--muted);font-size:1.1rem">›</span>
+    `;
+    card.onclick = a.fn;
+    div.appendChild(card);
+  });
+
+  return div;
+}
+
+function exportData() {
+  const blob = new Blob([JSON.stringify(state, null, 2)], { type:'application/json' });
+  const url  = URL.createObjectURL(blob);
+  const a    = document.createElement('a');
+  a.href = url;
+  a.download = `faetrap_backup_${new Date().toISOString().split('T')[0]}.json`;
+  a.click();
+  URL.revokeObjectURL(url);
+  showToast('Grove data exported 🌿');
+}
+
+function importData() {
+  const input = document.createElement('input');
+  input.type = 'file'; input.accept = '.json';
+  input.onchange = e => {
+    const file = e.target.files[0]; if (!file) return;
+    const reader = new FileReader();
+    reader.onload = ev => {
+      try {
+        const imported = JSON.parse(ev.target.result);
+        if (!imported.vendors && !imported.events) { showToast('Invalid backup file'); return; }
+        if (confirm('Replace current grove data with this backup?')) {
+          state = { ...defaultState, ...imported };
+          save(); showToast('Grove data restored 🌿'); render();
+        }
+      } catch { showToast('Could not read file'); }
+    };
+    reader.readAsText(file);
+  };
+  input.click();
+}
+
+function printVendors() {
+  const rows = state.vendors.map(v => {
+    const cat = getCat(v.category); const st = getVS(v.status);
+    return `<tr>
+      <td>${v.businessName||v.name||'—'}</td><td>${v.name||'—'}</td>
+      <td>${v.boothNumber||'—'}</td><td>${cat.label}</td><td>${st.label}</td>
+      <td>$${(parseFloat(v.feesPaid)||0).toFixed(2)}</td>
+      <td>$${(parseFloat(v.feesOwed)||0).toFixed(2)}</td>
+      <td>${v.email||'—'}</td><td>${v.phone||'—'}</td>
+    </tr>`;
+  }).join('');
+  const w = window.open('','_blank');
+  w.document.write(`<!DOCTYPE html><html><head><title>FaeTrap Vendor List</title>
+  <style>body{font-family:Arial,sans-serif;font-size:12px}h1{color:#4d7a3c}table{width:100%;border-collapse:collapse;margin-top:14px}th{background:#4d7a3c;color:white;padding:6px 8px;text-align:left;font-size:11px}td{padding:6px 8px;border-bottom:1px solid #eee}tr:nth-child(even)td{background:#f9f9f9}</style>
+  </head><body>
+  <h1>🌿 FaeTrap Vendor Grove</h1>
+  <p style="color:#888;font-size:11px">Vendor list printed ${new Date().toLocaleDateString()} — ${state.vendors.length} vendors</p>
+  <table><thead><tr><th>Business</th><th>Contact</th><th>Booth</th><th>Category</th><th>Status</th><th>Paid</th><th>Owed</th><th>Email</th><th>Phone</th></tr></thead>
+  <tbody>${rows}</tbody></table></body></html>`);
+  w.document.close(); w.print();
+}
+
+function clearData() {
+  if (confirm('Permanently delete ALL vendors, events, and contacts?')) {
+    if (confirm('This cannot be undone. Export a backup first if needed.')) {
+      state = { ...defaultState };
+      save(); showToast('Grove cleared'); render();
+    }
+  }
+}
+
+// ═══════════════════════════════════════════════
+// FORMS — VENDOR
+// ═══════════════════════════════════════════════
+
+function showVendorForm(v = null) {
+  const isEdit = !!v;
+  const overlay = mkOverlay();
+
+  overlay.querySelector('.modal').innerHTML = `
+    <div class="modal-header">
+      <h2>${isEdit ? 'Edit vendor' : 'Add vendor'}</h2>
+      <button class="close-btn" id="cls">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-row">
+        <div class="form-group"><label>Business name</label><input id="f-biz" type="text" placeholder="Moonbloom Studio" value="${v?.businessName||''}"></div>
+        <div class="form-group"><label>Contact name</label><input id="f-name" type="text" placeholder="Your name" value="${v?.name||''}"></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label>Email</label><input id="f-email" type="email" placeholder="hello@example.com" value="${v?.email||''}"></div>
+        <div class="form-group"><label>Phone</label><input id="f-phone" type="tel" placeholder="555-0100" value="${v?.phone||''}"></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label>Category</label><select id="f-cat">${VENDOR_CATS.map(c=>`<option value="${c.id}" ${(v?.category||'art')===c.id?'selected':''}>${c.icon} ${c.label}</option>`).join('')}</select></div>
+        <div class="form-group"><label>Status</label><select id="f-status">${VENDOR_STATUSES.map(s=>`<option value="${s.id}" ${(v?.status||'pending')===s.id?'selected':''}>${s.label}</option>`).join('')}</select></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label>Booth number</label><input id="f-booth" type="text" placeholder="A12" value="${v?.boothNumber||''}"></div>
+        <div class="form-group"><label>Booth fee ($)</label><input id="f-fee" type="number" step="0.01" placeholder="0.00" value="${v?.boothFee||''}"></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label>Fees paid ($)</label><input id="f-paid" type="number" step="0.01" placeholder="0.00" value="${v?.feesPaid||''}"></div>
+        <div class="form-group"><label>Fees owed ($)</label><input id="f-owed" type="number" step="0.01" placeholder="0.00" value="${v?.feesOwed||''}"></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label>Website</label><input id="f-web" type="text" placeholder="moonbloom.com" value="${v?.website||''}"></div>
+        <div class="form-group"><label>Instagram</label><input id="f-ig" type="text" placeholder="@handle" value="${v?.instagram||''}"></div>
+      </div>
+      <div class="form-group"><label>Notes</label><textarea id="f-notes" placeholder="Anything worth remembering…">${v?.notes||''}</textarea></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" id="cancel">Cancel</button>
+      <button class="btn btn-primary" id="save" style="flex:1">${isEdit ? '✓ Save changes' : '🍃 Add to grove'}</button>
+    </div>
+  `;
+
+  const m = overlay.querySelector('.modal');
+  overlay.querySelector('#cls').onclick = () => overlay.remove();
+  overlay.querySelector('#cancel').onclick = () => overlay.remove();
+
+  // Auto-calc owed
+  const feeI  = m.querySelector('#f-fee');
+  const paidI = m.querySelector('#f-paid');
+  const owedI = m.querySelector('#f-owed');
+  let manualOwed = false;
+  const calcOwed = () => {
+    if (manualOwed) return;
+    const diff = (parseFloat(feeI.value)||0) - (parseFloat(paidI.value)||0);
+    owedI.value = Math.max(0, diff).toFixed(2);
+  };
+  feeI.oninput = calcOwed;
+  paidI.oninput = calcOwed;
+  owedI.oninput = () => { manualOwed = true; };
+
+  m.querySelector('#save').onclick = () => {
+    const name = m.querySelector('#f-name').value.trim();
+    const biz  = m.querySelector('#f-biz').value.trim();
+    if (!name && !biz) { showToast('Please enter a name'); return; }
+    const data = {
+      id: v?.id || uid(),
+      businessName: biz, name,
+      email:       m.querySelector('#f-email').value.trim(),
+      phone:       m.querySelector('#f-phone').value.trim(),
+      category:    m.querySelector('#f-cat').value,
+      status:      m.querySelector('#f-status').value,
+      boothNumber: m.querySelector('#f-booth').value.trim(),
+      boothFee:    m.querySelector('#f-fee').value,
+      feesPaid:    m.querySelector('#f-paid').value,
+      feesOwed:    m.querySelector('#f-owed').value,
+      website:     m.querySelector('#f-web').value.trim(),
+      instagram:   m.querySelector('#f-ig').value.trim(),
+      notes:       m.querySelector('#f-notes').value.trim(),
+      createdAt:   v?.createdAt || new Date().toISOString(),
+    };
+    if (isEdit) {
+      state.vendors = state.vendors.map(x => x.id === v.id ? data : x);
+      showToast('Vendor updated 🌿');
+    } else {
+      state.vendors.push(data);
+      showToast('Vendor added to the grove 🌿');
+    }
+    save(); overlay.remove();
+    if (detailStack.length && detailStack[detailStack.length-1].type === 'vendor') {
+      render();
+    } else {
+      view = 'vendors'; render();
+    }
+  };
+
+  document.getElementById('app').appendChild(overlay);
+  setTimeout(() => m.querySelector('#f-biz').focus(), 80);
+}
+
+// ═══════════════════════════════════════════════
+// FORMS — EVENT
+// ═══════════════════════════════════════════════
+
+function showEventForm(e = null) {
+  const isEdit = !!e;
+  const overlay = mkOverlay();
+
+  overlay.querySelector('.modal').innerHTML = `
+    <div class="modal-header">
+      <h2>${isEdit ? 'Edit event' : 'Log event'}</h2>
+      <button class="close-btn" id="cls">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group"><label>Event name</label><input id="f-name" type="text" placeholder="Spring Market at the Grove" value="${e?.name||''}"></div>
+      <div class="form-row">
+        <div class="form-group"><label>Type</label><select id="f-type">${EVENT_TYPES.map(t=>`<option value="${t.id}" ${(e?.type||'market')===t.id?'selected':''}>${t.icon} ${t.label}</option>`).join('')}</select></div>
+        <div class="form-group"><label>Status</label><select id="f-status">${EVENT_STATUSES.map(s=>`<option value="${s.id}" ${(e?.status||'planning')===s.id?'selected':''}>${s.label}</option>`).join('')}</select></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label>Date</label><input id="f-date" type="date" value="${e?.date||''}"></div>
+        <div class="form-group"><label>Time</label><input id="f-time" type="text" placeholder="10am – 5pm" value="${e?.time||''}"></div>
+      </div>
+      <div class="form-group"><label>Location</label><input id="f-loc" type="text" placeholder="The Enchanted Courtyard, Main St" value="${e?.location||''}"></div>
+      <div class="form-group"><label>Booth capacity</label><input id="f-cap" type="number" placeholder="30" value="${e?.boothCount||''}"></div>
+      <div class="form-group"><label>Notes</label><textarea id="f-notes" placeholder="Setup instructions, weather notes, rules…">${e?.notes||''}</textarea></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" id="cancel">Cancel</button>
+      <button class="btn btn-secondary" id="save" style="flex:1">${isEdit ? '✓ Save changes' : '📅 Log event'}</button>
+    </div>
+  `;
+
+  const m = overlay.querySelector('.modal');
+  overlay.querySelector('#cls').onclick = () => overlay.remove();
+  overlay.querySelector('#cancel').onclick = () => overlay.remove();
+
+  m.querySelector('#save').onclick = () => {
+    const name = m.querySelector('#f-name').value.trim();
+    if (!name) { showToast('Please enter an event name'); return; }
+    const data = {
+      id: e?.id || uid(),
+      name,
+      type:       m.querySelector('#f-type').value,
+      status:     m.querySelector('#f-status').value,
+      date:       m.querySelector('#f-date').value,
+      time:       m.querySelector('#f-time').value.trim(),
+      location:   m.querySelector('#f-loc').value.trim(),
+      boothCount: m.querySelector('#f-cap').value,
+      notes:      m.querySelector('#f-notes').value.trim(),
+      vendorIds:  e?.vendorIds || [],
+      createdAt:  e?.createdAt || new Date().toISOString(),
+    };
+    if (isEdit) {
+      state.events = state.events.map(x => x.id === e.id ? data : x);
+      showToast('Event updated 📅');
+    } else {
+      state.events.push(data);
+      showToast('Event logged 📅');
+    }
+    save(); overlay.remove();
+    if (detailStack.length && detailStack[detailStack.length-1].type === 'event') {
+      render();
+    } else {
+      view = 'events'; render();
+    }
+  };
+
+  document.getElementById('app').appendChild(overlay);
+  setTimeout(() => m.querySelector('#f-name').focus(), 80);
+}
+
+// ═══════════════════════════════════════════════
+// FORMS — CONTACT
+// ═══════════════════════════════════════════════
+
+function showContactForm(c = null) {
+  const isEdit = !!c;
+  const overlay = mkOverlay();
+
+  overlay.querySelector('.modal').innerHTML = `
+    <div class="modal-header">
+      <h2>${isEdit ? 'Edit contact' : 'Add contact'}</h2>
+      <button class="close-btn" id="cls">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group"><label>Name</label><input id="f-name" type="text" placeholder="Full name" value="${c?.name||''}"></div>
+      <div class="form-group"><label>Role</label><select id="f-role">${CONTACT_ROLES.map(r=>`<option value="${r.id}" ${(c?.role||'other')===r.id?'selected':''}>${r.icon} ${r.label}</option>`).join('')}</select></div>
+      <div class="form-row">
+        <div class="form-group"><label>Email</label><input id="f-email" type="email" placeholder="hello@example.com" value="${c?.email||''}"></div>
+        <div class="form-group"><label>Phone</label><input id="f-phone" type="tel" placeholder="555-0100" value="${c?.phone||''}"></div>
+      </div>
+      <div class="form-group"><label>Notes</label><textarea id="f-notes" placeholder="Notes about this contact…">${c?.notes||''}</textarea></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" id="cancel">Cancel</button>
+      <button class="btn btn-primary" id="save" style="flex:1">${isEdit ? '✓ Save changes' : '🌙 Add contact'}</button>
+    </div>
+  `;
+
+  const m = overlay.querySelector('.modal');
+  overlay.querySelector('#cls').onclick = () => overlay.remove();
+  overlay.querySelector('#cancel').onclick = () => overlay.remove();
+
+  m.querySelector('#save').onclick = () => {
+    const name = m.querySelector('#f-name').value.trim();
+    if (!name) { showToast('Please enter a name'); return; }
+    const data = {
+      id: c?.id || uid(),
+      name,
+      role:      m.querySelector('#f-role').value,
+      email:     m.querySelector('#f-email').value.trim(),
+      phone:     m.querySelector('#f-phone').value.trim(),
+      notes:     m.querySelector('#f-notes').value.trim(),
+      createdAt: c?.createdAt || new Date().toISOString(),
+    };
+    if (isEdit) {
+      state.contacts = state.contacts.map(x => x.id === c.id ? data : x);
+      showToast('Contact updated 🌙');
+    } else {
+      state.contacts.push(data);
+      showToast('Contact added 🌙');
+    }
+    save(); overlay.remove();
+    if (detailStack.length && detailStack[detailStack.length-1].type === 'contact') {
+      render();
+    } else {
+      view = 'contacts'; render();
+    }
+  };
+
+  document.getElementById('app').appendChild(overlay);
+  setTimeout(() => m.querySelector('#f-name').focus(), 80);
+}
+
+// ═══════════════════════════════════════════════
+// VENDOR PICKER (for events)
+// ═══════════════════════════════════════════════
+
+function showVendorPicker(event) {
+  const overlay = mkOverlay();
+  let selected = new Set(event.vendorIds || []);
+
+  const m = overlay.querySelector('.modal');
+  m.innerHTML = `
+    <div class="modal-header">
+      <h2>Assign vendors to event</h2>
+      <button class="close-btn" id="cls">×</button>
+    </div>
+    <div class="modal-body" style="padding-bottom:6px">
+      <div class="search-bar" style="margin-bottom:9px">
+        <span style="color:var(--muted);font-size:0.9rem">🔍</span>
+        <input type="text" id="vpSearch" placeholder="Search vendors…">
+      </div>
+      <div id="vpList" class="item-list"></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" id="cancel">Cancel</button>
+      <button class="btn btn-primary" id="save" style="flex:1">✓ Save (<span id="selCount">${selected.size}</span> selected)</button>
+    </div>
+  `;
+
+  overlay.querySelector('#cls').onclick = () => overlay.remove();
+  overlay.querySelector('#cancel').onclick = () => overlay.remove();
+
+  const listEl = m.querySelector('#vpList');
+  const countEl = m.querySelector('#selCount');
+
+  const buildList = q => {
+    let vs = state.vendors;
+    if (q) vs = vs.filter(v => (v.businessName||v.name||'').toLowerCase().includes(q.toLowerCase()));
+    if (!vs.length) { listEl.innerHTML = `<div class="empty-state" style="padding:20px"><p>No vendors found</p></div>`; return; }
+    listEl.innerHTML = '';
+    vs.forEach(v => {
+      const cat = getCat(v.category);
+      const isSel = selected.has(v.id);
+      const card = document.createElement('div');
+      card.className = 'item-card';
+      card.style.cssText = `padding:10px 12px;${isSel?'background:var(--forest-bg);border-color:var(--forest-light)':''}`;
+      card.dataset.id = v.id;
+      card.innerHTML = `
+        <div style="display:flex;align-items:center;gap:10px">
+          <div style="width:28px;height:28px;border-radius:6px;background:${isSel?'var(--forest)':'var(--border-light)'};display:flex;align-items:center;justify-content:center;font-size:${isSel?'13px':'15px'};color:${isSel?'white':'inherit'};flex-shrink:0">${isSel?'✓':cat.icon}</div>
+          <div><div style="font-weight:600;font-size:0.87rem">${v.businessName||v.name}</div><div style="font-size:0.74rem;color:var(--muted)">${v.name||''}${v.boothNumber?' · Booth '+v.boothNumber:''}</div></div>
+        </div>
+      `;
+      card.onclick = () => {
+        if (selected.has(v.id)) selected.delete(v.id); else selected.add(v.id);
+        countEl.textContent = selected.size;
+        buildList(m.querySelector('#vpSearch').value);
+      };
+      listEl.appendChild(card);
+    });
+  };
+
+  m.querySelector('#vpSearch').oninput = e => buildList(e.target.value);
+
+  m.querySelector('#save').onclick = () => {
+    const updated = { ...event, vendorIds: [...selected] };
+    state.events = state.events.map(x => x.id === event.id ? updated : x);
+    save(); overlay.remove();
+    showToast(`${selected.size} vendor${selected.size!==1?'s':''} assigned`);
+    render();
+  };
+
+  buildList('');
+  document.getElementById('app').appendChild(overlay);
+}
+
+// ═══════════════════════════════════════════════
+// HELPERS
+// ═══════════════════════════════════════════════
+
+function mkOverlay() {
+  const overlay = document.createElement('div');
+  overlay.className = 'modal-overlay';
+  overlay.onclick = e => { if (e.target === overlay) overlay.remove(); };
+  const modal = document.createElement('div');
+  modal.className = 'modal';
+  overlay.appendChild(modal);
+  return overlay;
+}
+
+function showToast(msg) {
+  document.querySelectorAll('.toast').forEach(t => t.remove());
+  const t = document.createElement('div');
+  t.className = 'toast';
+  t.textContent = msg;
+  document.getElementById('app').appendChild(t);
+  setTimeout(() => t.remove(), 2600);
+}
+
+// ═══════════════════════════════════════════════
+// BOOT
+// ═══════════════════════════════════════════════
+
+render();
+
+// ═══════════════════════════════════════════════
+// PWA — SERVICE WORKER + INSTALL PROMPT
+// ═══════════════════════════════════════════════
+
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('./sw.js').catch(err => {
+      console.warn('Service worker registration failed:', err);
+    });
+  });
+}
+
+let deferredInstallPrompt = null;
+
+window.addEventListener('beforeinstallprompt', e => {
+  e.preventDefault();
+  deferredInstallPrompt = e;
+
+  // Don't show if already installed or dismissed this session
+  if (sessionStorage.getItem('installDismissed')) return;
+
+  const banner = document.createElement('div');
+  banner.className = 'install-banner';
+  banner.id = 'install-banner';
+  banner.innerHTML = `
+    <span class="install-banner-icon">🌿</span>
+    <div class="install-banner-text">
+      <div class="install-banner-title">Install FaeTrap</div>
+      <div class="install-banner-sub">Add to home screen for offline use</div>
+    </div>
+    <div class="install-banner-actions">
+      <button class="install-banner-btn dismiss" id="installDismiss">Not now</button>
+      <button class="install-banner-btn primary" id="installAccept">Install</button>
+    </div>
+  `;
+
+  document.getElementById('app').appendChild(banner);
+
+  document.getElementById('installDismiss').onclick = () => {
+    banner.remove();
+    sessionStorage.setItem('installDismissed', '1');
+  };
+
+  document.getElementById('installAccept').onclick = async () => {
+    banner.remove();
+    deferredInstallPrompt.prompt();
+    const { outcome } = await deferredInstallPrompt.userChoice;
+    deferredInstallPrompt = null;
+    if (outcome === 'accepted') showToast('FaeTrap installed 🌿');
+  };
+});
+
+window.addEventListener('appinstalled', () => {
+  document.getElementById('install-banner')?.remove();
+  deferredInstallPrompt = null;
+});
+</script>
+</body>
+</html>
