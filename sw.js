@@ -1,4 +1,4 @@
-const CACHE = 'faetrap-v6';
+const CACHE = 'faetrap-v7';
 
 const PRECACHE = [
   './faetrap_vendor_grove.html',

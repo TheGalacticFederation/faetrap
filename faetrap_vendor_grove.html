@@ -97,7 +97,7 @@ body::before {
   background: rgba(250,248,243,0.86);
   backdrop-filter: blur(14px) saturate(1.4);
   -webkit-backdrop-filter: blur(14px) saturate(1.4);
-  padding: calc(14px + env(safe-area-inset-top)) 18px 10px;
+  padding: calc(10px + env(safe-area-inset-top)) 16px 8px;
   border-bottom: 1px solid var(--border-light);
   position: sticky;
   top: 0;
@@ -110,19 +110,19 @@ body::before {
   flex-direction: column;
   align-items: center;
   text-align: center;
-  gap: 3px;
-  margin-bottom: 11px;
+  gap: 2px;
+  margin-bottom: 8px;
 }
 
 .app-brand-row {
   display: flex;
   align-items: center;
-  gap: 9px;
+  gap: 8px;
 }
 
 .app-brand-icon {
-  width: 44px;
-  height: 44px;
+  width: 38px;
+  height: 38px;
   background: radial-gradient(circle at 35% 30%, #ffffff, var(--forest-bg));
   border: 1.5px solid var(--forest-light);
   border-radius: 50%;
@@ -132,11 +132,11 @@ body::before {
   flex-shrink: 0;
   box-shadow: 0 0 0 3px rgba(106,154,82,0.15), 0 0 14px rgba(212,171,61,0.35), 0 2px 6px rgba(58,45,30,0.12);
 }
-.app-brand-icon svg { width: 32px; height: 32px; display: block; }
+.app-brand-icon svg { width: 27px; height: 27px; display: block; }
 
 .app-brand-name {
   font-family: var(--font-display);
-  font-size: 1.45rem;
+  font-size: 1.3rem;
   font-weight: 700;
   color: var(--forest-dark);
   letter-spacing: -0.01em;
@@ -190,7 +190,7 @@ body::before {
 /* ── Main ── */
 .main-content {
   flex: 1;
-  padding: 16px 15px 110px;
+  padding: 18px 16px 120px;
 }
 
 /* ── Bottom bar ── */
@@ -264,8 +264,8 @@ body::before {
 .stats-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 9px;
-  margin-bottom: 14px;
+  gap: 10px;
+  margin-bottom: 16px;
 }
 
 .stat-card {
@@ -316,7 +316,7 @@ body::before {
 .stat-label { font-size: 0.72rem; color: var(--muted); font-weight: 500; }
 
 /* ── Item cards ── */
-.item-list { display: flex; flex-direction: column; gap: 8px; }
+.item-list { display: flex; flex-direction: column; gap: 10px; }
 
 .item-card {
   background: linear-gradient(170deg, rgba(255,255,255,0.75), var(--surface));
@@ -328,11 +328,11 @@ body::before {
   transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
   position: relative;
 }
-.item-card.has-chevron { padding-right: 32px; }
+.item-card.has-chevron { padding-right: 34px; }
 .item-card.has-chevron::after {
   content: '›';
   position: absolute;
-  right: 13px;
+  right: 14px;
   top: 50%;
   transform: translateY(-50%);
   font-size: 1.4rem;
@@ -1011,10 +1011,10 @@ function mkDashboard() {
   if (totalOwed > 0) {
     const alert = document.createElement('div');
     alert.className = 'card';
-    alert.style.cssText = 'background:var(--honey-bg);border-color:#dcc88a;margin-bottom:13px;cursor:pointer';
+    alert.style.cssText = 'background:var(--honey-bg);border-color:#dcc88a;margin-bottom:16px;cursor:pointer';
     alert.innerHTML = `
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px">
-        <span style="font-weight:700;font-size:0.9rem">🪙 Outstanding fees</span>
+        <span style="font-weight:700;font-size:0.9rem">🍯 Outstanding fees</span>
         <span style="font-weight:800;color:var(--honey-dark)">$${totalOwed.toFixed(2)}</span>
       </div>
       <p style="font-size:0.78rem;color:var(--honey-dark)">${state.vendors.filter(v=>(parseFloat(v.feesOwed)||0)>0).length} vendor(s) have balances due</p>
@@ -1037,7 +1037,7 @@ function mkDashboard() {
   const upcoming = state.events.filter(e => e.status === 'upcoming' || e.status === 'planning');
   if (upcoming.length > 0) {
     const sec = document.createElement('div');
-    sec.style.marginTop = '13px';
+    sec.style.marginTop = '18px';
     sec.innerHTML = `<div class="section-header"><div style="font-weight:700;font-size:0.95rem">📅 Upcoming events</div><button class="btn btn-outline btn-sm" id="seeEvts">See all</button></div>`;
     const list = document.createElement('div');
     list.className = 'item-list';
@@ -1162,7 +1162,7 @@ function mkVendorDetail(vid) {
   const back = document.createElement('button');
   back.className = 'btn btn-outline btn-sm';
   back.innerHTML = '← Back';
-  back.style.marginBottom = '13px';
+  back.style.marginBottom = '14px';
   back.onclick = () => { detailStack.pop(); render(); };
   div.appendChild(back);
 
@@ -1185,7 +1185,7 @@ function mkVendorDetail(vid) {
   // Contact info
   const info = document.createElement('div');
   info.className = 'card';
-  info.style.marginBottom = '9px';
+  info.style.marginBottom = '10px';
   let ihtml = '<div class="detail-section-title">Contact Info</div>';
   if (v.email)     ihtml += `<div class="detail-row"><span class="detail-row-label">Email</span><span class="detail-row-value"><a href="mailto:${v.email}" style="color:var(--forest)">${v.email}</a></span></div>`;
   if (v.phone)     ihtml += `<div class="detail-row"><span class="detail-row-label">Phone</span><span class="detail-row-value"><a href="tel:${v.phone}" style="color:var(--forest)">${v.phone}</a></span></div>`;
@@ -1199,7 +1199,7 @@ function mkVendorDetail(vid) {
   // Fees
   const fees = document.createElement('div');
   fees.className = 'card';
-  fees.style.marginBottom = '9px';
+  fees.style.marginBottom = '10px';
   fees.innerHTML = `
     <div class="detail-section-title">Fees</div>
     <div class="fee-row"><span class="fee-label">Booth fee</span><span class="fee-amount">$${fee.toFixed(2)}</span></div>
@@ -1216,7 +1216,7 @@ function mkVendorDetail(vid) {
   if (v.notes) {
     const nc = document.createElement('div');
     nc.className = 'card';
-    nc.style.marginBottom = '9px';
+    nc.style.marginBottom = '10px';
     nc.innerHTML = `<div class="detail-section-title">Notes</div><p style="font-size:0.87rem;color:var(--bark-light);line-height:1.65">${v.notes}</p>`;
     div.appendChild(nc);
   }
@@ -1226,7 +1226,7 @@ function mkVendorDetail(vid) {
   if (evts.length) {
     const ec = document.createElement('div');
     ec.className = 'card';
-    ec.style.marginBottom = '9px';
+    ec.style.marginBottom = '10px';
     ec.innerHTML = `<div class="detail-section-title">Events (${evts.length})</div>`;
     evts.forEach(e => {
       const et = getET(e.type);
@@ -1371,7 +1371,7 @@ function mkEventDetail(eid) {
   const back = document.createElement('button');
   back.className = 'btn btn-outline btn-sm';
   back.innerHTML = '← Back';
-  back.style.marginBottom = '13px';
+  back.style.marginBottom = '14px';
   back.onclick = () => { detailStack.pop(); render(); };
   div.appendChild(back);
 
@@ -1396,7 +1396,7 @@ function mkEventDetail(eid) {
   // Info
   const info = document.createElement('div');
   info.className = 'card';
-  info.style.marginBottom = '9px';
+  info.style.marginBottom = '10px';
   let ihtml = '<div class="detail-section-title">Event Info</div>';
   if (e.date) {
     const d = new Date(e.date + 'T12:00:00');
@@ -1411,7 +1411,7 @@ function mkEventDetail(eid) {
   // Vendors
   const vc = document.createElement('div');
   vc.className = 'card';
-  vc.style.marginBottom = '9px';
+  vc.style.marginBottom = '10px';
   const vh = document.createElement('div');
   vh.style.cssText = 'display:flex;align-items:center;justify-content:space-between;margin-bottom:9px';
   vh.innerHTML = `<div class="detail-section-title" style="margin-bottom:0">Vendors (${evVendors.length})</div>`;
@@ -1447,7 +1447,7 @@ function mkEventDetail(eid) {
   if (e.notes) {
     const nc = document.createElement('div');
     nc.className = 'card';
-    nc.style.marginBottom = '9px';
+    nc.style.marginBottom = '10px';
     nc.innerHTML = `<div class="detail-section-title">Notes</div><p style="font-size:0.87rem;color:var(--bark-light);line-height:1.65">${e.notes}</p>`;
     div.appendChild(nc);
   }
@@ -1549,7 +1549,7 @@ function mkContactDetail(cid) {
   const back = document.createElement('button');
   back.className = 'btn btn-outline btn-sm';
   back.innerHTML = '← Back';
-  back.style.marginBottom = '13px';
+  back.style.marginBottom = '14px';
   back.onclick = () => { detailStack.pop(); render(); };
   div.appendChild(back);
 
@@ -1569,7 +1569,7 @@ function mkContactDetail(cid) {
 
   const info = document.createElement('div');
   info.className = 'card';
-  info.style.marginBottom = '9px';
+  info.style.marginBottom = '10px';
   let ihtml = '<div class="detail-section-title">Contact Info</div>';
   if (c.email) ihtml += `<div class="detail-row"><span class="detail-row-label">Email</span><span class="detail-row-value"><a href="mailto:${c.email}" style="color:var(--forest)">${c.email}</a></span></div>`;
   if (c.phone) ihtml += `<div class="detail-row"><span class="detail-row-label">Phone</span><span class="detail-row-value"><a href="tel:${c.phone}" style="color:var(--forest)">${c.phone}</a></span></div>`;
@@ -1621,7 +1621,7 @@ function mkAnalytics() {
   // Revenue summary
   const revCard = document.createElement('div');
   revCard.className = 'card';
-  revCard.style.marginBottom = '9px';
+  revCard.style.marginBottom = '10px';
   revCard.innerHTML = `
     <div class="detail-section-title">Revenue Summary</div>
     <div class="fee-row"><span class="fee-label">Total booth fees</span><span class="fee-amount">$${totalFee.toFixed(2)}</span></div>
@@ -1638,7 +1638,7 @@ function mkAnalytics() {
   if (state.vendors.length) {
     const stCard = document.createElement('div');
     stCard.className = 'card';
-    stCard.style.marginBottom = '9px';
+    stCard.style.marginBottom = '10px';
     stCard.innerHTML = `<div class="detail-section-title">Vendor Status</div>`;
     VENDOR_STATUSES.forEach(s => {
       const cnt = state.vendors.filter(v => v.status === s.id).length;
@@ -1661,7 +1661,7 @@ function mkAnalytics() {
   if (state.vendors.length) {
     const catCard = document.createElement('div');
     catCard.className = 'card';
-    catCard.style.marginBottom = '9px';
+    catCard.style.marginBottom = '10px';
     catCard.innerHTML = `<div class="detail-section-title">Vendor Categories</div>`;
     const counts = {};
     state.vendors.forEach(v => { const k = v.category||'other'; counts[k] = (counts[k]||0)+1; });
@@ -1689,7 +1689,7 @@ function mkAnalytics() {
   if (topPayers.length) {
     const fCard = document.createElement('div');
     fCard.className = 'card';
-    fCard.style.marginBottom = '9px';
+    fCard.style.marginBottom = '10px';
     fCard.innerHTML = `<div class="detail-section-title">Top Fee Collections</div>`;
     const maxF = parseFloat(topPayers[0].feesPaid)||1;
     topPayers.forEach(v => {
